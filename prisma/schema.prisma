@@ -1,0 +1,78 @@
+<<<<<<< HEAD
+=======
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+>>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+<<<<<<< HEAD
+  id       String     @id @default(uuid())
+  name     String
+  email    String     @unique
+  credits  Int        @default(150)
+  projects Projects[]
+}
+
+model Projects {
+  id          String     @id @default(uuid())
+  projectName String
+  githubUrl   String
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  stars       Int?
+  language    String?
+  responses   Response[]
+}
+
+model Response {
+  id            String        @id @default(uuid())
+  question      String
+  answer        String
+  projectId     String
+  project       Projects      @relation(fields: [projectId], references: [id])
+  fileContent   FileContent[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model FileContent {
+  id          String   @id @default(uuid())
+  filePath    String
+  fileContent String
+  responseId  String
+  response    Response @relation(fields: [responseId], references: [id])
+}
+
+
+/*
+Run this to create embedding table
+
+CREATE TABLE embeddings (
+  id SERIAL PRIMARY KEY,
+  content TEXT,
+  metadata JSONB,
+  embedding VECTOR(768),
+  "projectId" TEXT
+);
+
+*/
+=======
+  id      String      @id @default(uuid())
+  name    String 
+  email   String      @unique
+  credits Int         @default(150)
+}
+>>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7

@@ -1,0 +1,71 @@
+{
+  "name": "talk-to-code-restapi",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.21.0",
+<<<<<<< HEAD
+    "@google/generative-ai": "^0.24.1",
+    "@langchain/core": "^0.3.58",
+    "@langchain/google-genai": "^0.2.11",
+=======
+>>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
+    "@prisma/client": "^6.9.0",
+    "@radix-ui/react-checkbox": "^1.3.2",
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+<<<<<<< HEAD
+    "@radix-ui/react-tabs": "^1.1.12",
+    "axios": "^1.9.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "langchain": "^0.3.28",
+    "lucide-react": "^0.514.0",
+    "next": "15.3.3",
+    "p-limit": "^6.2.0",
+    "prisma": "^6.9.0",
+    "prismjs": "^1.30.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "react-toastify": "^11.0.5",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^3.25.63"
+=======
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.514.0",
+    "next": "15.3.3",
+    "prisma": "^6.9.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^3.3.1"
+>>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+<<<<<<< HEAD
+    "@types/prismjs": "^1.26.5",
+=======
+>>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.3.4",
+<<<<<<< HEAD
+    "typescript": "^5.8.3"
+=======
+    "typescript": "^5"
+>>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
+  }
+}
