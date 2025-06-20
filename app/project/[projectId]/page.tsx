@@ -25,11 +25,8 @@ import {
 } from "@/components/ui/sheet"
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism.css'; // Or any other theme
 import MarkdownRenderer from '@/components/MarkDownRenderer';
 import RelevantFiles from '@/components/RelevantFiles';
-import { showToast } from '@/lib/toast';
 
 interface FileContent {
     id: string;
@@ -304,7 +301,6 @@ export default function ProjectChat() {
                     </div>
                 </div>
             </div>
-
 
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                 <SheetContent className="min-w-[70%] sm:w-[70%] md:w-[50%] bg-[#1e1e1e] border-l border-[#3c3c3c] overflow-y-auto">
