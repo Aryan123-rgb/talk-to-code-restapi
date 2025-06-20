@@ -122,12 +122,6 @@ export default function ProjectChat() {
         setIsSending(false);
     };
 
-    const formatTimestamp = (date: Date) => {
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    };
-
-
-
     const handleQuestionClick = (id: string) => {
         const message = messages?.find(m => m.id === id);
         if (message) {
@@ -313,7 +307,7 @@ export default function ProjectChat() {
 
 
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                <SheetContent className="w-[40%] min-w-[40%] bg-[#1e1e1e] border-l border-[#3c3c3c] overflow-y-auto" >
+                <SheetContent className="min-w-[70%] sm:w-[70%] md:w-[50%] bg-[#1e1e1e] border-l border-[#3c3c3c] overflow-y-auto">
                     <SheetClose asChild>
                         <Button className="absolute right-4 top-4 text-white hover:text-gray-300">
                             <X className="w-5 h-5" />

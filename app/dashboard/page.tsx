@@ -1,31 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   LayoutDashboard,
   MessageSquare,
   Video,
   CreditCard,
   Code,
-<<<<<<< HEAD
   Search,
   Bell,
-=======
-  Github,
-  Calendar,
+  Plus,
+  ChevronDown,
   Clock,
   Star,
   GitBranch,
-  Users,
-  Settings,
-  LogOut,
-  Search,
-  Bell,
-  User
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
+  CheckCircle2,
+  AlertCircle
 } from 'lucide-react';
 import { DashboardSidebar } from '@/components/dashboard-sidebar';
 import DashboardComponent from '@/components/dashboard-component';
@@ -33,13 +28,21 @@ import AddProjectForm from '@/components/AddProjectForm';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Simulate loading
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const sidebarItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'qa', label: 'Q&A', icon: MessageSquare },
     { id: 'meetings', label: 'Meetings', icon: Video },
     { id: 'billing', label: 'Billing', icon: CreditCard },
-    { id: 'add-project', label: 'Add Project', icon: Code },
+    { id: 'add-project', label: 'Add Project', icon: Plus },
   ];
 
   const projects = [
@@ -51,7 +54,8 @@ export default function Dashboard() {
       language: 'TypeScript',
       stars: 24,
       lastAnalyzed: '2 hours ago',
-      status: 'active'
+      status: 'active',
+      branches: 3
     },
     {
       id: 2,
@@ -61,7 +65,8 @@ export default function Dashboard() {
       language: 'JavaScript',
       stars: 12,
       lastAnalyzed: '1 day ago',
-      status: 'active'
+      status: 'active',
+      branches: 2
     },
     {
       id: 3,
@@ -71,92 +76,83 @@ export default function Dashboard() {
       language: 'Python',
       stars: 45,
       lastAnalyzed: '3 days ago',
-      status: 'inactive'
+      status: 'inactive',
+      branches: 4
     }
   ];
 
-<<<<<<< HEAD
-=======
-  const getLanguageColor = (language: string) => {
-    const colors: { [key: string]: string } = {
-      'TypeScript': 'bg-[#0e639c]',
-      'JavaScript': 'bg-[#f7dc6f]',
-      'Python': 'bg-[#34c759]',
-      'Java': 'bg-[#b72e2e]',
-      'Go': 'bg-[#34c759]'
-    };
-    return colors[language] || 'bg-[#858585]';
-  };
-
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
   const onTabChange = (id: string) => {
     setActiveTab(id);
-  }
+  };
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="space-y-6">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-24 w-full rounded-lg" />
+          ))}
+        </div>
+      );
+    }
+
+    switch (activeTab) {
+      case 'dashboard':
+        return <DashboardComponent />;
+      case 'add-project':
+        return <AddProjectForm />;
+      default:
+        return (
+          <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)] text-center p-6">
+            <div className="w-20 h-20 bg-[#0e639c] rounded-2xl flex items-center justify-center mx-auto mb-6">
+              {(() => {
+                const Icon = sidebarItems.find(item => item.id === activeTab)?.icon || LayoutDashboard;
+                return <Icon className="w-10 h-10 text-white" />;
+              })()}
+            </div>
+            <h3 className="text-2xl font-semibold text-[#e0e0e0] mb-3">
+              {sidebarItems.find(item => item.id === activeTab)?.label} Coming Soon
+            </h3>
+            <p className="text-[#b5b5b5] max-w-md">
+              This section is under active development and will be available soon. Stay tuned for updates!
+            </p>
+            <Button className="mt-6 bg-[#0e639c] hover:bg-[#1177bb] text-white">
+              Notify Me When Ready
+            </Button>
+          </div>
+        );
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-[#1e1e1e]">
-      <div className="flex">
+    <div className="min-h-screen bg-[#1e1e1e] text-[#e0e0e0]">
+      <div className="flex flex-col lg:flex-row">
         {/* Sidebar */}
         <DashboardSidebar activeTab={activeTab} projects={projects} onTabChange={onTabChange} />
 
         {/* Main Content */}
         <div className="flex-1">
           {/* Header */}
-          <header className="bg-[#252526] border-b border-[#3c3c3c] p-6">
-            <div className="flex items-center justify-between">
+          <header className="bg-[#252526] border-b border-[#3c3c3c] p-4 md:p-6 sticky top-0 z-40">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-bold text-[#e0e0e0] mb-1">
+                <h1 className="text-xl md:text-2xl font-bold text-[#e0e0e0] mb-1">
                   {sidebarItems.find(item => item.id === activeTab)?.label || 'Dashboard'}
                 </h1>
-                <p className="text-[#b5b5b5]">
+                <p className="text-sm md:text-base text-[#b5b5b5]">
                   {activeTab === 'dashboard' && 'Welcome back! Here\'s an overview of your projects and activity.'}
                   {activeTab === 'qa' && 'Ask questions about your code and get intelligent answers.'}
                   {activeTab === 'meetings' && 'Schedule and manage your code review meetings.'}
                   {activeTab === 'billing' && 'Manage your subscription and billing information.'}
-<<<<<<< HEAD
                   {activeTab === 'add-project' && 'Connect a new GitHub repository to start analyzing and getting insights about your codebase'}
-=======
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
                 </p>
-              </div>
-              <div className="flex items-center space-x-4">
-                <Button variant="outline" size="sm" className="border-[#3c3c3c] text-[#9cdcfe] hover:bg-[#2a2d2e] hover:text-[#ffffff]">
-                  <Search className="w-4 h-4 mr-2" />
-                  Search
-                </Button>
-                <Button variant="outline" size="sm" className="border-[#3c3c3c] text-[#9cdcfe] hover:bg-[#2a2d2e] hover:text-[#ffffff]">
-                  <Bell className="w-4 h-4" />
-                </Button>
               </div>
             </div>
           </header>
 
-          {/* Dashboard Content */}
-          <main className="p-6 bg-[#1e1e1e]">
-            {activeTab === 'dashboard' && (
-              <DashboardComponent />
-            )}
-            {/* Placeholder content for other tabs */}
-            {activeTab == 'add-project' && (
-              <AddProjectForm />
-            )}
-            {activeTab !== 'dashboard' && activeTab != 'add-project' && (
-              <div className="flex items-center justify-center h-96">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-[#0e639c] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    {/* {sidebarItems.find(item => item.id === activeTab)?.icon && (
-                      <sidebarItems.find(item => item.id === activeTab)!.icon className="w-8 h-8 text-white" />
-                    )} */}
-                  </div>
-                  <h3 className="text-xl font-semibold text-[#e0e0e0] mb-2">
-                    {sidebarItems.find(item => item.id === activeTab)?.label} Coming Soon
-                  </h3>
-                  <p className="text-[#858585]">
-                    This section is under development and will be available soon.
-                  </p>
-                </div>
-              </div>
-            )}
+          {/* Main Content */}
+          <main className="p-4 md:p-6 bg-[#1e1e1e] min-h-[calc(100vh-160px)]">
+            {renderContent()}
           </main>
         </div>
       </div>

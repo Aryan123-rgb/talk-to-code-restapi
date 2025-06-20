@@ -5,10 +5,7 @@ import { cn } from "@/lib/utils"
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input
-<<<<<<< HEAD
       autoComplete="off"
-=======
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
       type={type}
       data-slot="input"
       className={cn(

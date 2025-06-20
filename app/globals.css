@@ -120,3 +120,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+/* Applies to all scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #1e1e1e; /* Same as VS Code background */
+}
+
+/* Thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #4e4e4e; /* Light gray thumb */
+  border-radius: 4px;
+}
+
+/* On hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #6e6e6e;
+}
+

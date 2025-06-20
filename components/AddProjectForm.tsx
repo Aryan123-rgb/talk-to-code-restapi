@@ -32,6 +32,7 @@ export default function AddProjectForm() {
                     url: githubUrl
                 })
                 const projectId = res.data.project.id;
+                showToast("Project created successfully", 'success');
                 router.push(`/project/${projectId}`);
             }
         } catch (error) {

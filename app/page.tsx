@@ -23,21 +23,23 @@ import {
   BookOpen,
   Settings,
   Users,
+  Menu,
+  X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-<<<<<<< HEAD
 import { useUser } from "@clerk/nextjs";
-=======
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 export default function Home() {
   const [githubUrl, setGithubUrl] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const router = useRouter();
-<<<<<<< HEAD
   const { user, isLoaded, isSignedIn } = useUser();
-=======
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
 
   const handleAnalyze = async () => {
     if (!githubUrl.trim()) return;
@@ -119,76 +121,117 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#1e1e1e] text-[#cccccc]">
       {/* Header */}
-      <header className="bg-[#1e1e1e] border-b border-[#404040]">
+      <header className="bg-[#1e1e1e] border-b border-[#404040] sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-[#0e639c] rounded-lg flex items-center justify-center">
                 <Code className="w-5 h-5 text-white" />
               </div>
-<<<<<<< HEAD
               <span className="text-xl font-bold text-[#ffffff]">
                 TalkToCode
               </span>
-=======
-              <span className="text-xl font-bold text-[#ffffff]">TalkToCode</span>
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
             </div>
+
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
               <a
                 href="#features"
-                className="text-[#9cdcfe] hover:text-[#ffffff] transition-colors"
+                className="text-[#9cdcfe] hover:text-[#ffffff] transition-colors text-sm lg:text-base"
               >
                 Features
               </a>
               <a
                 href="#how-it-works"
-                className="text-[#9cdcfe] hover:text-[#ffffff] transition-colors"
+                className="text-[#9cdcfe] hover:text-[#ffffff] transition-colors text-sm lg:text-base"
               >
                 How it Works
               </a>
               <div className="flex items-center space-x-4">
-<<<<<<< HEAD
                 {isLoaded && isSignedIn ? (
-                  <>
-                    {" "}
-                    <Button
-                      onClick={() => router.push("/dashboard")}
-                      variant="outline"
-                      className="border-[#3c3c3c] text-[#9cdcfe] bg-[#1e1e1e] hover:bg-[#2a2d2e] hover:text-[#ffffff] transition-colors cursor-pointer"
-                    >
-                      Dashboard
-                    </Button>
-                  </>
+                  <Button
+                    onClick={() => router.push("/dashboard")}
+                    variant="outline"
+                    className="border-[#3c3c3c] text-[#9cdcfe] bg-[#1e1e1e] hover:bg-[#2a2d2e] hover:text-[#ffffff] transition-colors cursor-pointer text-sm lg:text-base"
+                  >
+                    Dashboard
+                  </Button>
                 ) : (
-                  <>
-                    {" "}
-                    <Button
-                      onClick={() => router.push("/sign-in")}
-                      variant="outline"
-                      className="border-[#3c3c3c] text-[#9cdcfe] bg-[#1e1e1e] hover:bg-[#2a2d2e] hover:text-[#ffffff] transition-colors cursor-pointer"
-                    >
-                      Login
-                    </Button>
-                  </>
+                  <Button
+                    onClick={() => router.push("/sign-in")}
+                    variant="outline"
+                    className="border-[#3c3c3c] text-[#9cdcfe] bg-[#1e1e1e] hover:bg-[#2a2d2e] hover:text-[#ffffff] transition-colors cursor-pointer text-sm lg:text-base"
+                  >
+                    Login
+                  </Button>
                 )}
-=======
-                <Button
-                  onClick={() => router.push('/sign-in')}
-                  variant="outline"
-                  className="border-[#3c3c3c] text-[#9cdcfe] bg-[#1e1e1e] hover:bg-[#2a2d2e] hover:text-[#ffffff] transition-colors cursor-pointer"
-                >
-                  Login
-                </Button>
-                <Button
-                  onClick={() => router.push('/sign-up')}
-                  className="bg-[#0e639c] hover:bg-[#1177bb] text-white transition-colors cursor-pointer"
-                >
-                  Sign Up
-                </Button>
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
               </div>
             </nav>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="text-[#9cdcfe] hover:bg-[#2a2d2e] hover:text-white">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Toggle menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="bg-[#1e1e1e] border-l border-[#404040] w-[300px] sm:w-[350px] p-6">
+                  <div className="flex flex-col h-full">
+                    <div className="flex items-center justify-between mb-8">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 bg-[#0e639c] rounded-lg flex items-center justify-center">
+                          <Code className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="text-xl font-bold text-[#ffffff]">
+                          TalkToCode
+                        </span>
+                      </div>
+                      <SheetClose className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+                        <X className="h-5 w-5 text-[#9cdcfe]" />
+                        <span className="sr-only">Close</span>
+                      </SheetClose>
+                    </div>
+                    <nav className="flex-1 flex flex-col space-y-4 px-2">
+                      <SheetClose asChild>
+                        <a
+                          href="#features"
+                          className="text-[#9cdcfe] hover:text-white px-4 py-3 rounded-lg text-base font-medium hover:bg-[#2a2d2e] transition-colors"
+                        >
+                          Features
+                        </a>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <a
+                          href="#how-it-works"
+                          className="text-[#9cdcfe] hover:text-white px-4 py-3 rounded-lg text-base font-medium hover:bg-[#2a2d2e] transition-colors"
+                        >
+                          How it Works
+                        </a>
+                      </SheetClose>
+                      <div className="pt-4 mt-4 px-2">
+                        {isLoaded && isSignedIn ? (
+                          <Button
+                            onClick={() => router.push("/dashboard")}
+                            className="w-full bg-[#0e639c] hover:bg-[#1177bb] text-white py-6 text-base font-medium"
+                          >
+                            Go to Dashboard
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={() => router.push("/sign-in")}
+                            className="w-full bg-[#0e639c] hover:bg-[#1177bb] text-white py-6 text-base font-medium"
+                          >
+                            Sign In
+                          </Button>
+                        )}
+                      </div>
+                    </nav>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </header>
@@ -203,14 +246,7 @@ export default function Home() {
 
           <h1 className="text-5xl md:text-7xl font-bold text-[#e0e0e0] mb-6 leading-tight">
             Talk to Your
-<<<<<<< HEAD
             <span className="text-[#4ec9b0]"> Code</span>
-=======
-            <span className="text-[#4ec9b0]">
-              {" "}
-              Code
-            </span>
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
           </h1>
 
           <p className="text-xl text-[#b5b5b5] mb-12 max-w-2xl mx-auto leading-relaxed">
@@ -221,11 +257,7 @@ export default function Home() {
 
           {/* GitHub URL Input */}
           <div className="max-w-2xl mx-auto mb-8">
-<<<<<<< HEAD
             <div className="flex flex-col sm:flex-row gap-4 p-2 bg-[#252526] backdrop-blur-sm rounded-2xl">
-=======
-            <div className="flex flex-col sm:flex-row gap-4 p-2 bg-[#252526] backdrop-blur-sm rounded-2xl border border-[#3c3c3c]">
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
               <div className="flex-1 relative">
                 <Github className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#858585]" />
                 <Input
@@ -233,11 +265,7 @@ export default function Home() {
                   placeholder="https://github.com/username/repository"
                   value={githubUrl}
                   onChange={(e) => setGithubUrl(e.target.value)}
-<<<<<<< HEAD
                   className="pl-12 bg-[#252526] text-[#e0e0e0] placeholder-[#858585] text-lg h-14 border-0 focus-visible:ring-0"
-=======
-                  className="pl-12 bg-[#252526] border-[#3c3c3c] text-[#e0e0e0] placeholder-[#858585] focus:ring-0 text-lg h-14 focus:border-[#4b4b4b]"
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
                 />
               </div>
               <Button
@@ -288,13 +316,9 @@ export default function Home() {
       <section id="how-it-works" className="py-20 bg-[#252526]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-<<<<<<< HEAD
             <h2 className="text-4xl font-bold text-[#e0e0e0] mb-4">
               How It Works
             </h2>
-=======
-            <h2 className="text-4xl font-bold text-[#e0e0e0] mb-4">How It Works</h2>
->>>>>>> c77cfd2a013f58c7dd350a4aa707c6cfb5ccfcb7
             <p className="text-xl text-[#b5b5b5] max-w-2xl mx-auto">
               Get started in seconds with our simple four-step process
             </p>

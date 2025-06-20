@@ -32,11 +32,11 @@ const RelevantFiles = ({ fileContents }: { fileContents: FileContent[] }) => {
                 <TabsList className="flex w-full overflow-x-auto bg-[#2d2d2d] p-1 h-auto mb-4">
                     {fileContents.map((file) => (
                         <TabsTrigger
-                            key={file.id}
-                            value={file.id}
-                            className={`flex items-center gap-2 py-2 px-3 text-sm whitespace-nowrap ${activeTab === file.filePath
+                            key={file.filePath}
+                            value={file.filePath}
+                            className={`flex cursor-pointer items-center gap-2 py-2 px-3 text-sm whitespace-nowrap ${activeTab === file.filePath
                                 ? 'bg-white text-black'
-                                : 'text-[#a0a0a0] hover:text-white'
+                                : 'text-[#a0a0a0]'
                                 }`}
                         >
                             <Code className="w-4 h-4" />
@@ -50,8 +50,8 @@ const RelevantFiles = ({ fileContents }: { fileContents: FileContent[] }) => {
                 <div className="flex-1 min-h-[200px] max-h-[500px] overflow-y-auto">
                     {fileContents.map((file) => (
                         <TabsContent
-                            key={file.id}
-                            value={file.id}
+                            key={file.filePath}
+                            value={file.filePath}
                             className="mt-0 h-full"
                         >
                             <div className="bg-[#1e1e1e] p-4 rounded-lg">
