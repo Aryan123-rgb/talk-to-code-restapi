@@ -16,17 +16,6 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 
-interface Project {
-  id: number;
-  name: string;
-  description: string;
-  url: string;
-  language: string;
-  stars: number;
-  lastAnalyzed: string;
-  status: string;
-}
-
 interface SidebarItem {
   id: string;
   label: string;
@@ -36,13 +25,13 @@ interface SidebarItem {
 interface DashboardSidebarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
-  projects: Project[];
+  onSheetOpenChange?: (open: boolean) => void;
 }
 
 export function DashboardSidebar({
   activeTab,
   onTabChange,
-  projects,
+  onSheetOpenChange,
 }: DashboardSidebarProps) {
   const { user, isLoaded, isSignedIn } = useUser();
   const [isMobile, setIsMobile] = useState(false);
@@ -65,9 +54,6 @@ export function DashboardSidebar({
 
   const sidebarItems: SidebarItem[] = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "qa", label: "Q&A", icon: MessageSquare },
-    { id: "meetings", label: "Meetings", icon: Video },
-    { id: "billing", label: "Billing", icon: CreditCard },
     { id: "add-project", label: "Add Project", icon: Plus },
   ];
 
@@ -130,7 +116,7 @@ export function DashboardSidebar({
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-[#252526] border-b border-[#3c3c3c] p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Sheet>
+            <Sheet onOpenChange={onSheetOpenChange}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="text-[#9cdcfe] hover:bg-[#2a2d2e] hover:text-white">
                   <Menu className="h-6 w-6" />

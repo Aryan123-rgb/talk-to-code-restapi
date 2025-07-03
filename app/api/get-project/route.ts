@@ -1,11 +1,8 @@
 import { prismaclient } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 
-const getUserProjectSchema = z.object({
-    userId: z.string()
-})
-
+// GET PROJECT DETAILS
 export async function GET(req: NextRequest) {
     const projectId = req.nextUrl.searchParams.get('projectId');
     if (!projectId) {
@@ -39,11 +36,13 @@ export async function GET(req: NextRequest) {
     }
 }
 
+// FETCH ALL USER PROEJCTS
 export async function POST(req: NextRequest) {
+    const { userId } = await auth();
+    if (!userId) {
+        throw new Error("Unauthenticated request");
+    }
     try {
-        const data = getUserProjectSchema.parse(await req.json());
-        const userId = data.userId;
-
         const projects = await prismaclient.projects.findMany({
             where: {
                 userId: userId

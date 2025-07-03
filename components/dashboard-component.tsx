@@ -9,29 +9,42 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Github, Clock, Star, Loader2 } from "lucide-react";
+import { Github, Clock, Star, Loader2, FolderOpen, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { showToast } from "@/lib/toast";
 
 interface Projects {
     id: string;
     projectName: string;
     githubUrl: string;
     language: string;
-    stars: string;
+    stars: number;
 }
+const colors = {
+    TypeScript: "bg-[#4ec9b0]",
+    JavaScript: "bg-[#f7dc6f]",
+    Python: "bg-[#8bc34a]",
+    Java: "bg-[#ff9800]",
+    Go: "bg-[#03A9F4]",
+};
+
+type Language = keyof typeof colors;
 
 const getLanguageColor = (language: string) => {
-    const colors: { [key: string]: string } = {
-        TypeScript: "bg-[#4ec9b0]",
-        JavaScript: "bg-[#f7dc6f]",
-        Python: "bg-[#8bc34a]",
-        Java: "bg-[#ff9800]",
-        Go: "bg-[#03A9F4]",
-    };
-    return colors[language] || "bg-[#858585]";
+    return colors[language as Language] || "bg-gray-400";
 };
 
 export default function DashboardComponent() {
@@ -39,14 +52,14 @@ export default function DashboardComponent() {
     const { user, isLoaded, isSignedIn } = useUser();
     const [projects, setProjects] = useState<Projects[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [githubUrl, setGithubUrl] = useState("");
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isCreatingProject, setIsCreatingProject] = useState(false);
 
     const fetchUserProjects = async () => {
         setIsLoading(true);
         try {
-            const res = await axios.post('/api/get-project', {
-                userId: user?.id
-            })
-            console.log(res.data);
+            const res = await axios.post('/api/get-project');
             setProjects(res.data);
         } catch (e) {
             console.log("Error fetching user projects", e);
@@ -59,6 +72,27 @@ export default function DashboardComponent() {
             fetchUserProjects();
         }
     }, [isLoaded, isSignedIn]);
+
+
+    const handleCreateProject = async () => {
+        if (!githubUrl.trim()) {
+            showToast("Fill github url", 'info');
+            return;
+        }
+        setIsCreatingProject(true);
+        try {
+            const res = await axios.post(`/api/add-project`, {
+                url: githubUrl
+            })
+            const projectId = res.data.project.id;
+            showToast("Project created successfully", 'success');
+            router.push(`/project/${projectId}`);
+        } catch (error) {
+            console.log("Error occured while creating a project", error);
+            showToast('Something went wrong', 'error');
+        }
+        setIsCreatingProject(false);
+    }
 
 
     return (
@@ -118,22 +152,49 @@ export default function DashboardComponent() {
                 {/* Recent Projects */}
                 <Card className="bg-[#252526] border-[#3c3c3c]">
                     <CardHeader>
-                        <CardTitle className="text-[#e0e0e0]">Recent Projects</CardTitle>
-                        <CardDescription className="text-[#858585]">
-                            Your recently analyzed repositories
-                        </CardDescription>
+                        <div className="flex justify-between items-center w-full">
+                            <div>
+                                <CardTitle className="text-[#e0e0e0] text-xl font-semibold">Recent Projects</CardTitle>
+                                <CardDescription className="text-[#858585] text-sm">
+                                    Your recently analyzed repositories
+                                </CardDescription>
+                            </div>
+                            <Button 
+                                onClick={() => setIsDialogOpen(true)}
+                                className="bg-[#0e639c] hover:bg-[#1177bb] h-9 cursor-pointer"
+                            >
+                                <Plus className="w-4 h-4 mr-2" />
+                                Add Project
+                            </Button>
+                        </div>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            {projects.length == 0 ? (
+                            {isLoading ? (
                                 <div className="flex justify-center items-center py-12">
                                     <Loader2 className="h-8 w-8 text-[#0e639c] animate-spin" />
                                     <span className="ml-2 text-[#e0e0e0]">Loading projects...</span>
                                 </div>
+                            ) : projects.length == 0 ? (
+                                <div className="flex flex-col items-center justify-center py-16 px-4 text-center rounded-lg border-2 border-dashed border-[#3c3c3c] bg-[#252526] my-4">
+                                    <FolderOpen className="w-12 h-12 text-[#858585] mb-4" />
+                                    <h3 className="text-lg font-medium text-[#e0e0e0] mb-2">No projects yet</h3>
+                                    <p className="text-[#b5b5b5] mb-6 max-w-md">
+                                        Get started by creating a new project to organize your code and collaborate with others.
+                                    </p>
+                                    <button
+                                        onClick={() => setIsDialogOpen(true)}
+                                        className="cursor-pointer px-6 py-2 bg-[#0e639c] text-white rounded-md hover:bg-[#1177bb] transition-colors flex items-center"
+                                    >
+                                        <Plus className="w-4 h-4 mr-2" />
+                                        New Project
+                                    </button>
+                                </div>
                             ) : projects.map((project) => (
                                 <div
                                     key={project.id}
-                                    className="flex items-center justify-between p-4 bg-[#2a2d2e] rounded-lg border border-[#3c3c3c] hover:bg-[#33373a] transition-all duration-200 group"
+                                    className="flex items-center justify-between p-4 bg-[#2a2d2e] rounded-lg border border-[#3c3c3c] hover:bg-[#33373a] transition-all duration-200 group cursor-pointer"
+                                    onClick={() => router.push(`/project/${project.id}`)}
                                 >
                                     <div className="flex items-center space-x-4">
                                         <div className="w-10 h-10 bg-[#0e639c] rounded-lg flex items-center justify-center">
@@ -163,24 +224,8 @@ export default function DashboardComponent() {
                                                         {project.stars || 0}
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center space-x-1">
-                                                    <Clock className="w-3 h-3 text-[#858585]" />
-                                                    <span className="text-[#858585] text-xs">
-                                                        {/* {project.lastAnalyzed} */}
-                                                    </span>
-                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="flex items-center space-x-3">
-                                        <Button
-                                            onClick={() => router.push(`/project/${project.id}`)}
-                                            variant="outline"
-                                            size="sm"
-                                            className="border-[#3c3c3c] text-[#9cdcfe] bg-[#1e1e1e] hover:bg-[#2a2d2e] hover:text-[#ffffff] transition-colors cursor-pointer"
-                                        >
-                                            Open Chat
-                                        </Button>
                                     </div>
                                 </div>
                             ))}
@@ -188,6 +233,47 @@ export default function DashboardComponent() {
                     </CardContent>
                 </Card>
             </div>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent className="sm:max-w-[425px] bg-[#252526] border-[#3c3c3c] text-[#e0e0e0]">
+                    <DialogHeader>
+                        <DialogTitle>Add New Project</DialogTitle>
+                        <DialogDescription className="text-[#858585]">
+                            Enter the GitHub repository URL to analyze
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="githubUrl" className="text-right">
+                                GitHub URL
+                            </Label>
+                            <Input
+                                id="githubUrl"
+                                value={githubUrl}
+                                onChange={(e) => setGithubUrl(e.target.value)}
+                                placeholder="https://github.com/username/repo"
+                                className="col-span-3 bg-[#2a2d2e] border-[#3c3c3c] text-[#e0e0e0]"
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button
+                            type="submit"
+                            onClick={handleCreateProject}
+                            disabled={isCreatingProject}
+                            className="bg-[#0e639c] hover:bg-[#1177bb] flex items-center gap-2"
+                        >
+                            {isCreatingProject ? (
+                                <>
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    Analyzing...
+                                </>
+                            ) : (
+                                "Analyze Repository"
+                            )}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

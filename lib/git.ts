@@ -1,5 +1,6 @@
 import axios from 'axios'
 import pLimit from 'p-limit';
+import { NOT_ALLOWED_EXTENSIONS } from './constant';
 
 const AUTH_TOKEN = process.env.GITHUB_AUTH_TOKEN!
 
@@ -13,10 +14,8 @@ type FileWithContent = {
     content: string;
 };
 
-const NOT_ALLOWED_EXTENSIONS = ['.ico', '.sql', 'package-lock.json', '.svg', '.toml'];
-
 function isExtensionDisallowed(path: string): boolean {
-    return NOT_ALLOWED_EXTENSIONS.some(ext => path.endsWith(ext));
+    return NOT_ALLOWED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext.toLowerCase()));
 }
 
 export async function fetchRepoFileContents(treeApiUrl: string) {
@@ -64,6 +63,28 @@ export async function fetchRepoFileContents(treeApiUrl: string) {
     ));
 
     return fileContents;
+}
+
+export async function getRepoDetails(rootUrl: string) {
+    const [_, owner, repo] = new URL(rootUrl).pathname.split('/');
+
+    const repoName = repo.split('.')[0];
+
+    const url = `https://api.github.com/repos/${owner}/${repoName}`
+
+    const repoDetails = await axios.get(url, {
+        headers: {
+            Authorization: `Bearer ${AUTH_TOKEN}`,
+            Accept: "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+        }
+    });
+
+    return {
+        stars: repoDetails.data.stargazers_count,
+        repoName: repoDetails.data.name,
+        language: repoDetails.data.language
+    }
 }
 
 

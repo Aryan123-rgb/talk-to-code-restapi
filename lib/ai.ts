@@ -74,11 +74,9 @@ export async function storeEmbeddingToDb(data: {
 
         params.push(item.content);
         params.push(item.metadata);
-        params.push(item.vector);
+        params.push(vectorStr);
         params.push(projectId);
     })
-
-    console.log("values", values);
 
     const query = `
         INSERT INTO embeddings (content, metadata, embedding, "projectId")

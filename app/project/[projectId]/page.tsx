@@ -113,6 +113,7 @@ export default function ProjectChat() {
             console.log("res", res.data);
             setSelectedMessage(res.data);
             setIsSheetOpen(true);
+            fetchProjectDetails();
         } catch (e) {
             console.log("Error sending message", e);
         }

@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,23 +32,9 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
-  const [githubUrl, setGithubUrl] = useState("");
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const router = useRouter();
-  const { user, isLoaded, isSignedIn } = useUser();
-
-  const handleAnalyze = async () => {
-    if (!githubUrl.trim()) return;
-
-    setIsAnalyzing(true);
-    // Simulate analysis
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      // Here you would integrate with your backend
-    }, 2000);
-  };
 
   const features = [
     {
@@ -121,120 +105,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#1e1e1e] text-[#cccccc]">
       {/* Header */}
-      <header className="bg-[#1e1e1e] border-b border-[#404040] sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-[#0e639c] rounded-lg flex items-center justify-center">
-                <Code className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-[#ffffff]">
-                TalkToCode
-              </span>
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <a
-                href="#features"
-                className="text-[#9cdcfe] hover:text-[#ffffff] transition-colors text-sm lg:text-base"
-              >
-                Features
-              </a>
-              <a
-                href="#how-it-works"
-                className="text-[#9cdcfe] hover:text-[#ffffff] transition-colors text-sm lg:text-base"
-              >
-                How it Works
-              </a>
-              <div className="flex items-center space-x-4">
-                {isLoaded && isSignedIn ? (
-                  <Button
-                    onClick={() => router.push("/dashboard")}
-                    variant="outline"
-                    className="border-[#3c3c3c] text-[#9cdcfe] bg-[#1e1e1e] hover:bg-[#2a2d2e] hover:text-[#ffffff] transition-colors cursor-pointer text-sm lg:text-base"
-                  >
-                    Dashboard
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={() => router.push("/sign-in")}
-                    variant="outline"
-                    className="border-[#3c3c3c] text-[#9cdcfe] bg-[#1e1e1e] hover:bg-[#2a2d2e] hover:text-[#ffffff] transition-colors cursor-pointer text-sm lg:text-base"
-                  >
-                    Login
-                  </Button>
-                )}
-              </div>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-[#9cdcfe] hover:bg-[#2a2d2e] hover:text-white">
-                    <Menu className="h-6 w-6" />
-                    <span className="sr-only">Toggle menu</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="bg-[#1e1e1e] border-l border-[#404040] w-[300px] sm:w-[350px] p-6">
-                  <div className="flex flex-col h-full">
-                    <div className="flex items-center justify-between mb-8">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-[#0e639c] rounded-lg flex items-center justify-center">
-                          <Code className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-xl font-bold text-[#ffffff]">
-                          TalkToCode
-                        </span>
-                      </div>
-                      <SheetClose className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-                        <X className="h-5 w-5 text-[#9cdcfe]" />
-                        <span className="sr-only">Close</span>
-                      </SheetClose>
-                    </div>
-                    <nav className="flex-1 flex flex-col space-y-4 px-2">
-                      <SheetClose asChild>
-                        <a
-                          href="#features"
-                          className="text-[#9cdcfe] hover:text-white px-4 py-3 rounded-lg text-base font-medium hover:bg-[#2a2d2e] transition-colors"
-                        >
-                          Features
-                        </a>
-                      </SheetClose>
-                      <SheetClose asChild>
-                        <a
-                          href="#how-it-works"
-                          className="text-[#9cdcfe] hover:text-white px-4 py-3 rounded-lg text-base font-medium hover:bg-[#2a2d2e] transition-colors"
-                        >
-                          How it Works
-                        </a>
-                      </SheetClose>
-                      <div className="pt-4 mt-4 px-2">
-                        {isLoaded && isSignedIn ? (
-                          <Button
-                            onClick={() => router.push("/dashboard")}
-                            className="w-full bg-[#0e639c] hover:bg-[#1177bb] text-white py-6 text-base font-medium"
-                          >
-                            Go to Dashboard
-                          </Button>
-                        ) : (
-                          <Button
-                            onClick={() => router.push("/sign-in")}
-                            className="w-full bg-[#0e639c] hover:bg-[#1177bb] text-white py-6 text-base font-medium"
-                          >
-                            Sign In
-                          </Button>
-                        )}
-                      </div>
-                    </nav>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 text-center">
@@ -263,26 +134,13 @@ export default function Home() {
                 <Input
                   type="url"
                   placeholder="https://github.com/username/repository"
-                  value={githubUrl}
-                  onChange={(e) => setGithubUrl(e.target.value)}
                   className="pl-12 bg-[#252526] text-[#e0e0e0] placeholder-[#858585] text-lg h-14 border-0 focus-visible:ring-0"
                 />
               </div>
               <Button
-                onClick={handleAnalyze}
-                disabled={!githubUrl.trim() || isAnalyzing}
                 className="bg-[#0e639c] hover:bg-[#1177bb] text-white px-8 h-14 text-lg font-semibold transition-all duration-300"
               >
-                {isAnalyzing ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    Analyze Repository <ArrowRight className="ml-2 w-5 h-5" />
-                  </>
-                )}
+                Analyze Repository <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </div>
 

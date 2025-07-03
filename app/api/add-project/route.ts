@@ -1,13 +1,12 @@
 import { createDocumentFromFiles, storeEmbeddingToDb } from "@/lib/ai";
 import { prismaclient } from "@/lib/db";
-import { fetchRepoFileContents } from "@/lib/git";
+import { fetchRepoFileContents, getRepoDetails } from "@/lib/git";
 import { auth } from "@clerk/nextjs/server";
 import { v4 as uuidv4 } from 'uuid';
 import { NextRequest, NextResponse } from "next/server";
 import { z } from 'zod'
 
 const createProjectSchema = z.object({
-    projectName: z.string(),
     url: z.string()
 })
 
@@ -31,18 +30,21 @@ export async function POST(req: NextRequest) {
 
         const repoName = repo.split('.')[0];
 
-        const giturl = `https://api.github.com/repos/${owner}/${repoName}/git/trees/master?recursive=1`;
+        const giturl = `https://api.github.com/repos/${owner}/${repoName}/git/trees/main?recursive=1`;
 
         const repoContents = await fetchRepoFileContents(giturl);
         const embeddings = await createDocumentFromFiles(repoContents);
         await storeEmbeddingToDb(embeddings, projectId);
+        const repoDetails = await getRepoDetails(fullUrl);
 
         const project = await prismaclient.projects.create({
             data: {
                 id: projectId,
                 userId: userId,
-                projectName: data.projectName,
-                githubUrl: data.url
+                projectName: repoDetails.repoName,
+                githubUrl: data.url,
+                language: repoDetails.language,
+                stars: repoDetails.stars
             }
         })
 
